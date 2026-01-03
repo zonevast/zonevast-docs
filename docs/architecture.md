@@ -18,10 +18,9 @@ graph TB
     Catalog[Catalog Service]
     Credit[Credit Service]
     Admin[Admin Service]
-    DB[PostgreSQL Database]
-    MQ[RabbitMQ Message Queue]
     Cache[Redis Cache]
-    Storage[MinIO File Storage]
+    MQ[RabbitMQ Message Queue]
+    Storage[File Storage]
 
     Frontend --> Gateway
     Gateway --> Auth
@@ -34,17 +33,6 @@ graph TB
     Gateway --> Catalog
     Gateway --> Credit
     Gateway --> Admin
-
-    Auth --> DB
-    Product --> DB
-    Order --> DB
-    Inventory --> DB
-    Billing --> DB
-    POS --> DB
-    Project --> DB
-    Catalog --> DB
-    Credit --> DB
-    Admin --> DB
 
     Auth --> Cache
     Product --> Cache
@@ -91,9 +79,9 @@ Frontend apps are built with **Next.js 14**, **React 18**, and **TypeScript**.
 ### Frontend Communication
 
 Frontend apps communicate with backend through:
-- **REST API**: Direct calls to Django services
+- **REST API**: Direct calls to services
 - **GraphQL**: Apollo Client with code generation
-- **API Gateway**: All production traffic goes through SAM Gateway
+- **API Gateway**: All traffic goes through SAM Gateway
 
 ## Backend Services
 
@@ -101,29 +89,28 @@ Backend services are built with **Django** and **Django REST Framework**.
 
 ### Core Services
 
-| Service | Description | Database |
-|---------|-------------|----------|
-| **zv-auth-service** | Authentication, JWT tokens, RBAC | zv_auth_db |
-| **zv-product-eco-service** | Product catalog, categories, tags | zv_product_db |
-| **zv-inventory-eco-service** | Stock management, reservations | zv_inventory_db |
-| **zv-order-eco-service** | Order processing, fulfillment | zv_order_db |
-| **zv-billing-eco-service** | Payment processing, invoicing | zv_billing_db |
-| **zv-pos-eco-service** | Point of sale, in-store transactions | zv_pos_db |
-| **zv-project-service** | Project management, file attachments | zv_project_db |
-| **zv_catalog_service** | Service catalog and marketplace | zv_catalog_db |
-| **zv_credit_finance_service** | Credit and finance management | zv_credit_db |
-| **zv_admin_interface** | Admin dashboard and monitoring | zv_admin_db |
+| Service | Description |
+|---------|-------------|
+| **zv-auth-service** | Authentication, JWT tokens, RBAC |
+| **zv-product-eco-service** | Product catalog, categories, tags |
+| **zv-inventory-eco-service** | Stock management, reservations |
+| **zv-order-eco-service** | Order processing, fulfillment |
+| **zv-billing-eco-service** | Payment processing, invoicing |
+| **zv-pos-eco-service** | Point of sale, in-store transactions |
+| **zv-project-service** | Project management, file attachments |
+| **zv_catalog_service** | Service catalog and marketplace |
+| **zv_credit_finance_service** | Credit and finance management |
+| **zv_admin_interface** | Admin dashboard and monitoring |
 
 ### Backend Architecture
 
 - **Framework**: Django 4.2+ with Django REST Framework
 - **API Style**: REST (primary), GraphQL (via Graphene)
 - **Authentication**: JWT tokens (djangorestframework-simplejwt)
-- **Database**: PostgreSQL 13 (separate DB per service)
 - **Message Broker**: RabbitMQ for async tasks
 - **Caching**: Redis for session and query caching
-- **File Storage**: MinIO (S3-compatible)
-- **Deployment**: Docker + AWS Lambda support
+- **File Storage**: S3-compatible object storage
+- **Deployment**: AWS Lambda support
 
 ### Service Communication
 
@@ -131,11 +118,9 @@ Services communicate through:
 - **HTTP/REST**: Synchronous calls between services
 - **RabbitMQ**: Asynchronous messaging
 - **GraphQL**: For frontend queries (via Graphene)
-- **Kong Gateway**: Production API routing
+- **API Gateway**: Production API routing
 
 ## API Gateway
-
-### API Gateway
 
 The API Gateway layer routes all incoming requests to appropriate services.
 
@@ -197,7 +182,7 @@ Examples:
 ```
 1. User → Frontend (Portal) → Login Request
 2. Frontend → API Gateway → Auth Service (/api/v1/auth/login/)
-3. Auth Service → PostgreSQL → Validate credentials
+3. Auth Service → Validate credentials
 4. Auth Service → Generate JWT token
 5. Auth Service → API Gateway → Frontend (JWT token)
 6. Frontend → Store token in localStorage/cookie
@@ -211,7 +196,7 @@ Examples:
 1. Frontend → API Request with JWT
 2. API Gateway → Validate JWT token
 3. API Gateway → Route to appropriate service
-4. Service → Business logic + Database queries
+4. Service → Process request
 5. Service → Response to API Gateway
 6. API Gateway → Response to Frontend
 ```
@@ -223,19 +208,11 @@ Examples:
 2. Apollo Client → Add JWT token to headers
 3. API Gateway → Route to GraphQL service
 4. Graphene (Django) → Execute query
-5. Service → Query database/resolver functions
-6. Service → Return JSON response
-7. Frontend → Update UI with data
+5. Service → Return JSON response
+6. Frontend → Update UI with data
 ```
 
 ## Infrastructure
-
-### Database Layer
-
-- **PostgreSQL 13**: Primary database for all services
-- **Separate databases per service**: Isolation and scalability
-- **Connection pooling**: PgBouncer for efficient connections
-- **Backups**: Daily automated backups
 
 ### Caching Layer
 
@@ -251,7 +228,7 @@ Examples:
 
 ### File Storage
 
-- **MinIO**: S3-compatible object storage
+- **S3-compatible**: Object storage
 - **Buckets**: Organized by service and type
 - **CDN**: CloudFront for static assets
 
@@ -286,8 +263,8 @@ Examples:
 
 ### Vertical Scaling
 
-- **Database optimization**: Indexing, query optimization
-- **Caching**: Reduce database load
+- **Query optimization**: Indexing, query optimization
+- **Caching**: Reduce load
 - **Connection pooling**: Efficient resource usage
 
 ## Deployment

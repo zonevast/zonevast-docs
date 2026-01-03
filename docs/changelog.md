@@ -89,13 +89,13 @@ https://api.zonevast.com/graphql/{service-name}
 
 ### Added
 - **New Services**:
-  - zv_catalog_service (port 8090)
-  - zv_credit_finance_service (port 8100)
-  - zv_admin_interface (port 8110)
+  - zv_catalog_service (Service catalog)
+  - zv_credit_finance_service (Credit and finance)
+  - zv_admin_interface (Admin dashboard)
 
 - **Frontend Apps**:
-  - BlogSuite (port 3007)
-  - CustomerSuite (port 3008)
+  - BlogSuite (Content management)
+  - CustomerSuite (CRM)
 
 - **SDK Features**:
   - TypeScript strict mode support
@@ -162,8 +162,8 @@ See [Migration Guide](./package.md#migration-guide) for detailed instructions.
 - **Project Service**: File attachments
 
 ### Changed
-- Optimized database queries
-- Added database indexes
+- Optimized API queries
+- Improved caching
 - Improved API response times
 
 ### Fixed
@@ -192,16 +192,16 @@ See [Migration Guide](./package.md#migration-guide) for detailed instructions.
 
 ### Added
 - **Initial Release**:
-  - Auth Service (port 8010)
-  - Product Service (port 8020)
-  - Inventory Service (port 8030)
-  - Order Service (port 8040)
+  - Auth Service
+  - Product Service
+  - Inventory Service
+  - Order Service
 
 - **Frontend Apps**:
-  - Portal (port 3001)
-  - ProductSuite (port 3002)
-  - InventorySuite (port 3003)
-  - OrderSuite (port 3004)
+  - Portal
+  - ProductSuite
+  - InventorySuite
+  - OrderSuite
 
 - **SDK**: JavaScript/TypeScript SDK v1.0
 

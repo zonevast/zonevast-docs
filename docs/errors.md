@@ -169,8 +169,8 @@ if (response.status === 429) {
 
 **Examples**:
 - Unhandled exception
-- Database connection error
 - Service unavailable
+- Temporary service outage
 
 **Solution**:
 ```typescript
