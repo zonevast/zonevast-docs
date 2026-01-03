@@ -169,88 +169,6 @@ npm run preview
 
 Test the production build locally before deploying.
 
-## Basic Usage Examples
-
-### Check Authentication Status
-
-```typescript
-import { useAuth } from '@/hooks/useAuth';
-
-function UserProfile() {
-  const { isAuthenticated, user, userEmail } = useAuth();
-
-  if (!isAuthenticated) {
-    return <p>Please log in</p>;
-  }
-
-  return (
-    <div>
-      <h1>Welcome, {user?.first_name}!</h1>
-      <p>Email: {userEmail}</p>
-    </div>
-  );
-}
-```
-
-### Login and Make Request
-
-```typescript
-import { useAuth } from '@/hooks/useAuth';
-import { useState } from 'react';
-
-function DataFetcher() {
-  const { login, isAuthenticated } = useAuth();
-  const [data, setData] = useState(null);
-
-  const fetchData = async () => {
-    // Login first
-    await login({
-      email: 'demo@example.com',
-      password: 'any'
-    });
-
-    // Then fetch data
-    if (isAuthenticated) {
-      const token = localStorage.getItem('auth_token');
-      const response = await fetch('/api/v1/catalog/items/', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const result = await response.json();
-      setData(result);
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={fetchData}>Load Data</button>
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-    </div>
-  );
-}
-```
-
-### Use GraphQL with Generated Hooks
-
-```typescript
-// After running codegen (see graphql-client.md)
-import { useGetProjectsQuery } from '@/lib/generated/graphql';
-
-function Projects() {
-  const { data, loading, error } = useGetProjectsQuery();
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  return (
-    <div>
-      {data.projects.map(project => (
-        <div key={project.id}>{project.name}</div>
-      ))}
-    </div>
-  );
-}
-```
-
 ## Service URLs Reference
 
 ### Development Environment
@@ -338,14 +256,7 @@ if (isAuthenticated()) {
 
 ## Next Steps
 
-- Read [Authentication Guide](./authentication.md) for detailed auth setup
-- Read [GraphQL Client Guide](./graphql-client.md) for GraphQL usage
-- Read [State Management Guide](./state-management.md) for managing app state
-- Read [Multi-Language Guide](./multi-language.md) for i18n setup
-
-## Getting Help
-
-- **Documentation**: Check `/docs/` directory
-- **Examples**: See `src/__tests__/` for usage examples
-- **Issues**: Report bugs on GitHub Issues
-- **Community**: Join our Discord/Slack for discussions
+- Read [API Basics](./api-basics.md) for detailed authentication setup
+- Read [Architecture](./architecture.md) for system overview
+- Read [Examples](./examples.md) for code examples
+- Check [Errors](./errors.md) for troubleshooting

@@ -1,6 +1,6 @@
-# Authentication Guide
+# API Basics
 
-This guide shows how to authenticate with ZoneVast platform APIs.
+This guide shows how to authenticate with ZoneVast platform APIs and make API requests.
 
 ## Overview
 
@@ -8,6 +8,14 @@ ZoneVast uses JWT (JSON Web Token) authentication. When you log in, you receive:
 - **access token**: Short-lived token for API requests
 - **refresh token**: Long-lived token for getting new access tokens
 - **user data**: User profile information
+
+## Base URLs
+
+| Environment | REST API | GraphQL |
+|-------------|----------|---------|
+| Production | `https://api.zonevast.com/api/v1` | `https://api.zonevast.com/graphql/{service}` |
+| Staging | `https://dev-api.zonevast.com/api/v1` | `https://test.zonevast.com/graphql/{service}` |
+| Development | `http://localhost:8010-8110/api/v1` | `http://localhost:3000/graphql/{service}` |
 
 ## Getting a JWT Token
 
@@ -80,6 +88,14 @@ const { access, refresh, user } = response.data;
 localStorage.setItem('auth_token', access);
 ```
 
+### cURL Example
+
+```bash
+curl -X POST https://api.zonevast.com/api/v1/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"user@example.com","password":"password123"}'
+```
+
 ## Using Token in Requests
 
 ### With Fetch
@@ -142,6 +158,13 @@ function ProjectList() {
 }
 ```
 
+### cURL Example
+
+```bash
+curl -X GET https://api.zonevast.com/api/v1/project/projects/ \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
 ## Token Management
 
 ### Check if User is Authenticated
@@ -185,6 +208,14 @@ const data = await response.json();
 
 // Store new access token
 localStorage.setItem('auth_token', data.access);
+```
+
+### cURL Refresh Token
+
+```bash
+curl -X POST https://api.zonevast.com/api/v1/auth/token/refresh/ \
+  -H "Content-Type: application/json" \
+  -d '{"refresh":"YOUR_REFRESH_TOKEN"}'
 ```
 
 ### Logout
@@ -277,29 +308,148 @@ try {
 }
 ```
 
-## cURL Examples
+## REST API Patterns
 
-### Login
+### Service Endpoint Pattern
 
-```bash
-curl -X POST http://localhost:8010/api/v1/auth/login/ \
-  -H "Content-Type: application/json" \
-  -d '{"username":"user@example.com","password":"password123"}'
+```
+https://api.zonevast.com/api/v1/{service}/{endpoint}
 ```
 
-### Authenticated Request
+### Common Endpoints
 
-```bash
-curl -X GET http://localhost:8010/api/v1/project/projects/ \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+| Service | Base Path | Description |
+|---------|-----------|-------------|
+| Auth | `/api/v1/auth/` | Authentication endpoints |
+| Product | `/api/v1/product/` | Product catalog |
+| Inventory | `/api/v1/inventory/` | Stock management |
+| Order | `/api/v1/order/` | Order processing |
+| Billing | `/api/v1/billing/` | Payments and invoices |
+| Project | `/api/v1/project/` | Project management |
+
+### Example: List Products
+
+```typescript
+const response = await fetch('/api/v1/product/products/', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+});
+
+const products = await response.json();
+// Returns: { count: 100, results: [...] }
 ```
 
-### Refresh Token
+### Example: Create Order
 
-```bash
-curl -X POST http://localhost:8010/api/v1/auth/token/refresh/ \
-  -H "Content-Type: application/json" \
-  -d '{"refresh":"YOUR_REFRESH_TOKEN"}'
+```typescript
+const response = await fetch('/api/v1/order/orders/', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    customer_id: 123,
+    items: [
+      { product_id: 1, quantity: 2 },
+      { product_id: 5, quantity: 1 }
+    ]
+  })
+});
+
+const order = await response.json();
+```
+
+## GraphQL Patterns
+
+### GraphQL Endpoint Pattern
+
+```
+https://api.zonevast.com/graphql/{service-name}
+```
+
+### Available Services
+
+- `product` - Product catalog
+- `inventory` - Stock management
+- `order` - Order processing
+- `customer` - Customer data
+- `repair` - Repair services
+- `debt` - Debt management
+- `billing` - Payments
+- `pos` - Point of sale
+- `analytics` - Analytics
+- `console` - Admin console
+
+### Example: Query Products
+
+```typescript
+import { gql, useQuery } from '@apollo/client';
+
+const GET_PRODUCTS = gql`
+  query GetProducts {
+    products {
+      id
+      name
+      price
+      stock
+    }
+  }
+`;
+
+function Products() {
+  const { data, loading, error } = useQuery(GET_PRODUCTS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return (
+    <ul>
+      {data.products.map(product => (
+        <li key={product.id}>
+          {product.name} - ${product.price}
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### Example: Mutation
+
+```typescript
+import { gql, useMutation } from '@apollo/client';
+
+const CREATE_ORDER = gql`
+  mutation CreateOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      id
+      total
+      status
+    }
+  }
+`;
+
+function CreateOrder() {
+  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER);
+
+  const handleSubmit = async () => {
+    await createOrder({
+      variables: {
+        input: {
+          customerId: 123,
+          items: [
+            { productId: 1, quantity: 2 }
+          ]
+        }
+      }
+    });
+  };
+
+  return <button onClick={handleSubmit}>Create Order</button>;
+}
 ```
 
 ## Best Practices
@@ -310,6 +460,7 @@ curl -X POST http://localhost:8010/api/v1/auth/token/refresh/ \
 4. **Validate tokens server-side**: Never trust tokens only on the client
 5. **Use HTTPS**: Always use HTTPS in production for auth endpoints
 6. **Handle 401 errors**: Redirect to login when tokens expire
+7. **Include tokens in headers**: Always use `Authorization: Bearer ${token}` format
 
 ## Demo Mode
 
@@ -323,9 +474,26 @@ await login({ email: 'test@example.com', password: 'any' });
 
 ## Service Endpoints
 
-- **Auth Service**: `http://localhost:8010` (local)
-- **Login**: `/api/v1/auth/login/`
-- **Register**: `/api/v1/auth/register/`
-- **Logout**: `/api/v1/auth/logout/`
-- **Refresh Token**: `/api/v1/auth/token/refresh/`
-- **Get Current User**: `/api/v1/auth/me/`
+### Authentication Service
+
+- **Base URL**: `https://api.zonevast.com/api/v1/auth/`
+- **Login**: `POST /login/`
+- **Register**: `POST /register/`
+- **Logout**: `POST /logout/`
+- **Refresh Token**: `POST /token/refresh/`
+- **Get Current User**: `GET /me/`
+
+### Other Services
+
+See individual service documentation for available endpoints:
+- [Product Service](./services/product-service.md)
+- [Inventory Service](./services/inventory-service.md)
+- [Order Service](./services/order-service.md)
+- [Billing Service](./services/billing-service.md)
+- [Project Service](./services/project-service.md)
+
+## Next Steps
+
+- Read [Examples](./examples.md) for more code examples
+- Read [Architecture](./architecture.md) for system overview
+- Check [Errors](./errors.md) for troubleshooting
