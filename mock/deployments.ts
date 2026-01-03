@@ -1,0 +1,72 @@
+import { Deployment } from '../../types';
+
+export const MOCK_DEPLOYMENTS: Deployment[] = [
+  { 
+    id: 'dep_1', 
+    projectId: 'p1', 
+    name: 'Frontend - Production', 
+    description: 'Main customer-facing application storefront.',
+    type: 'frontend', 
+    url: 'https://app.zonevast.com', 
+    status: 'healthy', 
+    lastDeployed: '2 hours ago', 
+    region: 'US-East', 
+    cpuUsage: 45, 
+    memoryUsage: 60, 
+    version: 'v1.2.0', 
+    latestVersion: 'v1.2.0', 
+    branch: 'main', 
+    commitHash: '8a92b1' 
+  },
+  { 
+    id: 'dep_2', 
+    projectId: 'p1', 
+    name: 'Frontend - Staging', 
+    description: 'Staging environment for QA testing.',
+    type: 'frontend', 
+    url: 'https://staging.zonevast.com', 
+    status: 'building', 
+    lastDeployed: 'Just now', 
+    region: 'US-East', 
+    cpuUsage: 80, 
+    memoryUsage: 75, 
+    version: 'v1.2.1-beta', 
+    latestVersion: 'v1.2.1-beta', 
+    branch: 'develop', 
+    commitHash: 'c4d1e2' 
+  },
+  { 
+    id: 'dep_3', 
+    projectId: 'p1', 
+    name: 'API Service', 
+    description: 'Core backend REST API service.',
+    type: 'backend', 
+    url: 'https://api.zonevast.com', 
+    status: 'degraded', 
+    lastDeployed: '1 day ago', 
+    region: 'US-East', 
+    cpuUsage: 92, 
+    memoryUsage: 88, 
+    version: 'v2.0.1', 
+    latestVersion: 'v2.1.0', 
+    branch: 'main', 
+    commitHash: 'f1e2d3' 
+  },
+  { 
+    id: 'dep_4', 
+    projectId: 'p1', 
+    name: 'Primary DB', 
+    description: 'PostgreSQL cluster.',
+    type: 'database', 
+    url: 'db.zonevast.internal', 
+    status: 'healthy', 
+    lastDeployed: '5 days ago', 
+    region: 'US-East', 
+    cpuUsage: 25, 
+    memoryUsage: 40, 
+    version: 'v14.2', 
+    latestVersion: 'v14.5', 
+    branch: '-', 
+    commitHash: '-' 
+  }
+];
