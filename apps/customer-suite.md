@@ -3,14 +3,6 @@
 ## Purpose
 Customer relationship management with calendar and document generation.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/CustomerSuite
-npm install
-npm run dev -p 3008
-```
-Access at: http://localhost:3008
-
 ## Key Features
 - Customer profiles and management
 - Calendar integration (FullCalendar)
@@ -31,3 +23,6 @@ Access at: http://localhost:3008
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/customer`
+
+## Online Access
+Available at: https://test.zonevast.com/customers

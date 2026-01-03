@@ -32,8 +32,8 @@ pnpm add @zonevast/sdk
 import { ZoneVastClient } from '@zonevast/sdk';
 
 const client = new ZoneVastClient({
-  baseURL: 'https://api.zonevast.com',
-  authURL: 'https://api.zonevast.com/api/v1/auth'
+  baseURL: 'https://test.zonevast.com',
+  authURL: 'https://test.zonevast.com/api/v1/auth'
 });
 
 // Login
@@ -89,8 +89,8 @@ pip install zonevast
 from zonevast import ZoneVastClient
 
 client = ZoneVastClient(
-    base_url='https://api.zonevast.com',
-    auth_url='https://api.zonevast.com/api/v1/auth'
+    base_url='https://test.zonevast.com',
+    auth_url='https://test.zonevast.com/api/v1/auth'
 )
 
 # Login
@@ -198,7 +198,7 @@ npm install -D @zonevast/graphql-codegen
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  schema: 'https://api.zonevast.com/graphql/product',
+  schema: 'https://test.zonevast.com/graphql/product',
   documents: 'src/graphql/**/*.graphql',
   generates: {
     'src/lib/generated/graphql.ts': {
@@ -265,9 +265,9 @@ client.order.updateStatus(id, status)
 ```typescript
 const client = new ZoneVastClient({
   // API configuration
-  baseURL: 'https://api.zonevast.com',
-  authURL: 'https://api.zonevast.com/api/v1/auth',
-  graphqlURL: 'https://api.zonevast.com/graphql',
+  baseURL: 'https://test.zonevast.com',
+  authURL: 'https://test.zonevast.com/api/v1/auth',
+  graphqlURL: 'https://test.zonevast.com/graphql',
 
   // Auth configuration
   storage: 'localStorage', // or 'cookie'
@@ -287,14 +287,9 @@ const client = new ZoneVastClient({
 
 ```typescript
 const config = {
-  development: {
-    baseURL: 'http://localhost:8010',
-    authURL: 'http://localhost:8010/api/v1/auth',
-    graphqlURL: 'http://localhost:3000/graphql'
-  },
   staging: {
-    baseURL: 'https://dev-api.zonevast.com',
-    authURL: 'https://dev-api.zonevast.com/api/v1/auth',
+    baseURL: 'https://test.zonevast.com',
+    authURL: 'https://test.zonevast.com/api/v1/auth',
     graphqlURL: 'https://test.zonevast.com/graphql'
   },
   production: {
@@ -315,7 +310,7 @@ const client = new ZoneVastClient(config[process.env.NODE_ENV]);
 import axios from 'axios';
 
 const customClient = axios.create({
-  baseURL: 'https://api.zonevast.com',
+  baseURL: 'https://test.zonevast.com',
   timeout: 30000
 });
 
@@ -356,7 +351,7 @@ client.addErrorInterceptor((error) => {
 import { ZoneVastGraphQLClient } from '@zonevast/sdk/graphql';
 
 const gqlClient = new ZoneVastGraphQLClient({
-  url: 'wss://api.zonevast.com/graphql',
+  url: 'wss://test.zonevast.com/graphql',
   connectionParams: {
     authToken: localStorage.getItem('auth_token')
   }

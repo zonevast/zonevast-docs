@@ -4,45 +4,57 @@ ZoneVast is a comprehensive microservices ecosystem with frontend applications, 
 
 ## System Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Frontend Applications                     │
-│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐   │
-│  │Portal│ │Product│ │Inventory│ │Order│ │DebtPro│ │RepairPro│  │
-│  │3001  │ │Suite │ │ Suite  │ │Suite│ │       │ │        │   │
-│  │      │ │ 3002  │ │  3003   │ │3004 │ │ 3005  │ │  3006  │   │
-│  └──────┘ └──────┘ └──────┘ └──────┘ └──────┘ └──────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      AWS SAM API Gateway                     │
-│                    (REST API + GraphQL)                      │
-│                  https://api.zonevast.com                   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   Backend Services (Django)                  │
-│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐   │
-│  │ Auth │ │Product│ │Inventory│ │Order│ │Billing│ │Project│  │
-│  │8010  │ │ 8020  │ │  8030   │ │8040 │ │ 8050  │ │ 8070  │   │
-│  └──────┘ └──────┘ └──────┘ └──────┘ └──────┘ └──────┘   │
-│                                                               │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐     │
-│  │   POS    │ │  Catalog │ │   Credit │ │   Admin  │     │
-│  │   8060   │ │   8090   │ │   8100   │ │   8110   │     │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘     │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   Data & Infrastructure                      │
-│  ┌──────────┐ ┌──────┐ ┌──────┐ ┌──────────┐             │
-│  │PostgreSQL│ │RabbitMQ│ │ Redis│ │  MinIO   │             │
-│  │ :5432    │ │ :5672 │ │:6379 │ │  :9000   │             │
-│  └──────────┘ └──────┘ └──────┘ └──────────┘             │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    Frontend[Frontend Applications]
+    Gateway[API Gateway<br/>test.zonevast.com]
+    Auth[Auth Service]
+    Product[Product Service]
+    Order[Order Service]
+    Inventory[Inventory Service]
+    Billing[Billing Service]
+    POS[POS Service]
+    Project[Project Service]
+    Catalog[Catalog Service]
+    Credit[Credit Service]
+    Admin[Admin Service]
+    DB[PostgreSQL Database]
+    MQ[RabbitMQ Message Queue]
+    Cache[Redis Cache]
+    Storage[MinIO File Storage]
+
+    Frontend --> Gateway
+    Gateway --> Auth
+    Gateway --> Product
+    Gateway --> Order
+    Gateway --> Inventory
+    Gateway --> Billing
+    Gateway --> POS
+    Gateway --> Project
+    Gateway --> Catalog
+    Gateway --> Credit
+    Gateway --> Admin
+
+    Auth --> DB
+    Product --> DB
+    Order --> DB
+    Inventory --> DB
+    Billing --> DB
+    POS --> DB
+    Project --> DB
+    Catalog --> DB
+    Credit --> DB
+    Admin --> DB
+
+    Auth --> Cache
+    Product --> Cache
+    Order --> Cache
+
+    Order --> MQ
+    Inventory --> MQ
+
+    Project --> Storage
+    Product --> Storage
 ```
 
 ## Frontend Applications
@@ -51,16 +63,16 @@ Frontend apps are built with **Next.js 14**, **React 18**, and **TypeScript**.
 
 ### Applications Overview
 
-| Application | Port | Description | Tech Stack |
-|-------------|------|-------------|------------|
-| **Portal** | 3001 | Main entry point, authentication, dashboard | Next.js, NextUI |
-| **ProductSuite** | 3002 | Product catalog management | Next.js, Recharts |
-| **InventorySuite** | 3003 | Stock management, reservations | Next.js, D3.js |
-| **OrderSuite** | 3004 | Order processing, fulfillment | Next.js, Framer Motion |
-| **DebtPro** | 3005 | Debt tracking and management | Next.js, React Query |
-| **RepairPro** | 3006 | Repair service management | Next.js, Zustand |
-| **BlogSuite** | 3007 | Content management system | Next.js, MDX |
-| **CustomerSuite** | 3008 | CRM and customer management | Next.js, React Hook Form |
+| Application | Description | Tech Stack |
+|-------------|-------------|------------|
+| **Portal** | Main entry point, authentication, dashboard | Next.js, NextUI |
+| **ProductSuite** | Product catalog management | Next.js, Recharts |
+| **InventorySuite** | Stock management, reservations | Next.js, D3.js |
+| **OrderSuite** | Order processing, fulfillment | Next.js, Framer Motion |
+| **DebtPro** | Debt tracking and management | Next.js, React Query |
+| **RepairPro** | Repair service management | Next.js, Zustand |
+| **BlogSuite** | Content management system | Next.js, MDX |
+| **CustomerSuite** | CRM and customer management | Next.js, React Hook Form |
 
 ### Frontend Architecture
 
@@ -89,18 +101,18 @@ Backend services are built with **Django** and **Django REST Framework**.
 
 ### Core Services
 
-| Service | Port | Description | Database |
-|---------|------|-------------|----------|
-| **zv-auth-service** | 8010 | Authentication, JWT tokens, RBAC | zv_auth_db |
-| **zv-product-eco-service** | 8020 | Product catalog, categories, tags | zv_product_db |
-| **zv-inventory-eco-service** | 8030 | Stock management, reservations | zv_inventory_db |
-| **zv-order-eco-service** | 8040 | Order processing, fulfillment | zv_order_db |
-| **zv-billing-eco-service** | 8050 | Payment processing, invoicing | zv_billing_db |
-| **zv-pos-eco-service** | 8060 | Point of sale, in-store transactions | zv_pos_db |
-| **zv-project-service** | 8070 | Project management, file attachments | zv_project_db |
-| **zv_catalog_service** | 8090 | Service catalog and marketplace | zv_catalog_db |
-| **zv_credit_finance_service** | 8100 | Credit and finance management | zv_credit_db |
-| **zv_admin_interface** | 8110 | Admin dashboard and monitoring | zv_admin_db |
+| Service | Description | Database |
+|---------|-------------|----------|
+| **zv-auth-service** | Authentication, JWT tokens, RBAC | zv_auth_db |
+| **zv-product-eco-service** | Product catalog, categories, tags | zv_product_db |
+| **zv-inventory-eco-service** | Stock management, reservations | zv_inventory_db |
+| **zv-order-eco-service** | Order processing, fulfillment | zv_order_db |
+| **zv-billing-eco-service** | Payment processing, invoicing | zv_billing_db |
+| **zv-pos-eco-service** | Point of sale, in-store transactions | zv_pos_db |
+| **zv-project-service** | Project management, file attachments | zv_project_db |
+| **zv_catalog_service** | Service catalog and marketplace | zv_catalog_db |
+| **zv_credit_finance_service** | Credit and finance management | zv_credit_db |
+| **zv_admin_interface** | Admin dashboard and monitoring | zv_admin_db |
 
 ### Backend Architecture
 
@@ -123,33 +135,33 @@ Services communicate through:
 
 ## API Gateway
 
-### AWS SAM Gateway
+### API Gateway
 
 The API Gateway layer routes all incoming requests to appropriate services.
 
-**Gateway URL**: `https://api.zonevast.com`
+**Gateway URL**: `https://test.zonevast.com`
 
 ### Routing Patterns
 
 **REST API Pattern:**
 ```
-https://api.zonevast.com/api/v1/{service-name}/{endpoint}
+https://test.zonevast.com/api/v1/{service-name}/{endpoint}
 ```
 
 Examples:
-- `https://api.zonevast.com/api/v1/auth/login/`
-- `https://api.zonevast.com/api/v1/product/products/`
-- `https://api.zonevast.com/api/v1/inventory/items/`
+- `https://test.zonevast.com/api/v1/auth/login/`
+- `https://test.zonevast.com/api/v1/product/products/`
+- `https://test.zonevast.com/api/v1/inventory/items/`
 
 **GraphQL Pattern:**
 ```
-https://api.zonevast.com/graphql/{service-name}
+https://test.zonevast.com/graphql/{service-name}
 ```
 
 Examples:
-- `https://api.zonevast.com/graphql/product`
-- `https://api.zonevast.com/graphql/inventory`
-- `https://api.zonevast.com/graphql/order`
+- `https://test.zonevast.com/graphql/product`
+- `https://test.zonevast.com/graphql/inventory`
+- `https://test.zonevast.com/graphql/order`
 
 ### Gateway Features
 
@@ -162,6 +174,14 @@ Examples:
 
 ## Base URLs
 
+### Staging (Test Environment)
+
+| Type | URL |
+|------|-----|
+| REST API | `https://test.zonevast.com/api/v1` |
+| GraphQL | `https://test.zonevast.com/graphql/{service}` |
+| Frontend | `https://test.zonevast.com` |
+
 ### Production
 
 | Type | URL |
@@ -169,22 +189,6 @@ Examples:
 | REST API | `https://api.zonevast.com/api/v1` |
 | GraphQL | `https://api.zonevast.com/graphql/{service}` |
 | Frontend | `https://zonevast.com` |
-
-### Staging
-
-| Type | URL |
-|------|-----|
-| REST API | `https://dev-api.zonevast.com/api/v1` |
-| GraphQL | `https://test.zonevast.com/graphql/{service}` |
-| Frontend | `https://test.zonevast.com` |
-
-### Development
-
-| Type | URL |
-|------|-----|
-| REST API | `http://localhost:8010-8110/api/v1/{service}` |
-| GraphQL | `http://localhost:3000/graphql/{service}` |
-| Frontend | `http://localhost:3001-3008` |
 
 ## Data Flow
 
@@ -287,12 +291,6 @@ Examples:
 - **Connection pooling**: Efficient resource usage
 
 ## Deployment
-
-### Development
-
-- **Local Docker Compose**: Full stack locally
-- **Hot reload**: Fast development iteration
-- **Shared volumes**: Live code editing
 
 ### Production
 

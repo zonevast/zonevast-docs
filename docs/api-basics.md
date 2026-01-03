@@ -14,8 +14,7 @@ ZoneVast uses JWT (JSON Web Token) authentication. When you log in, you receive:
 | Environment | REST API | GraphQL |
 |-------------|----------|---------|
 | Production | `https://api.zonevast.com/api/v1` | `https://api.zonevast.com/graphql/{service}` |
-| Staging | `https://dev-api.zonevast.com/api/v1` | `https://test.zonevast.com/graphql/{service}` |
-| Development | `http://localhost:8010-8110/api/v1` | `http://localhost:3000/graphql/{service}` |
+| Staging | `https://test.zonevast.com/api/v1` | `https://test.zonevast.com/graphql/{service}` |
 
 ## Getting a JWT Token
 
@@ -91,7 +90,7 @@ localStorage.setItem('auth_token', access);
 ### cURL Example
 
 ```bash
-curl -X POST https://api.zonevast.com/api/v1/auth/login/ \
+curl -X POST https://test.zonevast.com/api/v1/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username":"user@example.com","password":"password123"}'
 ```
@@ -161,7 +160,7 @@ function ProjectList() {
 ### cURL Example
 
 ```bash
-curl -X GET https://api.zonevast.com/api/v1/project/projects/ \
+curl -X GET https://test.zonevast.com/api/v1/project/projects/ \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -213,7 +212,7 @@ localStorage.setItem('auth_token', data.access);
 ### cURL Refresh Token
 
 ```bash
-curl -X POST https://api.zonevast.com/api/v1/auth/token/refresh/ \
+curl -X POST https://test.zonevast.com/api/v1/auth/token/refresh/ \
   -H "Content-Type: application/json" \
   -d '{"refresh":"YOUR_REFRESH_TOKEN"}'
 ```
@@ -313,7 +312,7 @@ try {
 ### Service Endpoint Pattern
 
 ```
-https://api.zonevast.com/api/v1/{service}/{endpoint}
+https://test.zonevast.com/api/v1/{service}/{endpoint}
 ```
 
 ### Common Endpoints
@@ -367,7 +366,7 @@ const order = await response.json();
 ### GraphQL Endpoint Pattern
 
 ```
-https://api.zonevast.com/graphql/{service-name}
+https://test.zonevast.com/graphql/{service-name}
 ```
 
 ### Available Services
@@ -476,7 +475,7 @@ await login({ email: 'test@example.com', password: 'any' });
 
 ### Authentication Service
 
-- **Base URL**: `https://api.zonevast.com/api/v1/auth/`
+- **Base URL**: `https://test.zonevast.com/api/v1/auth/`
 - **Login**: `POST /login/`
 - **Register**: `POST /register/`
 - **Logout**: `POST /logout/`

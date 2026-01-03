@@ -15,22 +15,9 @@ ZoneVast is a comprehensive microservices platform providing:
 ### How do I get started?
 
 1. Read the [Quick Start Guide](./quick-start.md)
-2. Set up your environment
-3. Install SDK (optional): `npm install @zonevast/sdk`
-4. Make your first API call
-5. Explore the documentation
-
-### What are the system requirements?
-
-**Frontend Development**:
-- Node.js 18+
-- npm or yarn
-- Modern web browser
-
-**Backend Development**:
-- Python 3.9+
-- PostgreSQL 13+
-- Redis (optional, for caching)
+2. Get your API credentials
+3. Make your first API call
+4. Explore the documentation
 
 ## Authentication
 
@@ -103,7 +90,7 @@ const client = new ZoneVastClient({
 - GraphQL: `https://api.zonevast.com/graphql/{service}`
 
 **Staging**:
-- REST: `https://dev-api.zonevast.com/api/v1`
+- REST: `https://test.zonevast.com/api/v1`
 - GraphQL: `https://test.zonevast.com/graphql/{service}`
 
 ### How do I make API calls?
@@ -181,17 +168,17 @@ query GetProducts($first: Int, $after: String) {
 
 ## Frontend
 
-### Which frontend framework should I use?
+### Which frontend applications are available?
 
-ZoneVast provides Next.js applications. You can use:
-- **Portal** (port 3001): Main entry point
-- **ProductSuite** (port 3002): Product management
-- **InventorySuite** (port 3003): Inventory management
-- **OrderSuite** (port 3004): Order processing
-- **DebtPro** (port 3005): Debt management
-- **RepairPro** (port 3006): Repair services
-- **BlogSuite** (port 3007): Content management
-- **CustomerSuite** (port 3008): CRM
+ZoneVast provides Next.js applications:
+- **Portal**: Main entry point at https://test.zonevast.com
+- **ProductSuite**: Product management at https://test.zonevast.com/products
+- **InventorySuite**: Inventory management at https://test.zonevast.com/inventory
+- **OrderSuite**: Order processing at https://test.zonevast.com/orders
+- **DebtPro**: Debt management at https://test.zonevast.com/debt
+- **RepairPro**: Repair services at https://test.zonevast.com/repair
+- **BlogSuite**: Content management at https://test.zonevast.com/blog
+- **CustomerSuite**: CRM at https://test.zonevast.com/customers
 
 Or build your own with the SDK.
 
@@ -248,34 +235,11 @@ const useStore = create((set) => ({
 
 ## Backend
 
-### Can I run backend services locally?
+### How do I integrate backend services?
 
-Yes! Use Docker Compose:
+Use the API endpoints documented in this portal. All services are accessible through the API Gateway at `https://test.zonevast.com/api/v1/`.
 
-```bash
-cd kong-gateway/
-docker-compose up -d
-```
-
-Services will be available on ports 8010-8110.
-
-### How do I deploy a service?
-
-Use `micrzone` CLI:
-
-```bash
-micrzone update dev
-```
-
-Or use AWS SAM for Lambda deployment.
-
-### How do I add a new microservice?
-
-1. Create Django project
-2. Add REST endpoints or GraphQL schema
-3. Deploy to Lambda
-4. Configure API Gateway routing
-5. Update documentation
+For GraphQL services, use `https://test.zonevast.com/graphql/{service-name}`.
 
 See [Architecture](./architecture.md) for details.
 
@@ -291,21 +255,19 @@ Means API Gateway isn't receiving your auth token. Check:
 
 ### CORS errors
 
-Configure your environment or use proxy:
+If you encounter CORS errors, ensure your requests are going to the correct API endpoint:
 
 ```typescript
-// vite.config.ts
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8010',
-        changeOrigin: true
-      }
-    }
+// Correct API endpoint
+const response = await fetch('https://test.zonevast.com/api/v1/products/', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
   }
 });
 ```
+
+If issues persist, contact support with your domain information.
 
 ### 429 Too Many Requests
 
@@ -352,30 +314,6 @@ https://github.com/zonevast/platform/issues
 
 https://github.com/zonevast/platform/discussions
 
-## Development
-
-### How do I contribute?
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-### Where is the source code?
-
-https://github.com/zonevast/platform
-
-### How do I run tests?
-
-```bash
-# Frontend
-npm run test
-
-# Backend (Django)
-python3 manage.py test
-```
-
 ## Troubleshooting
 
 ### Backend not responding
@@ -383,20 +321,14 @@ python3 manage.py test
 Check service health:
 
 ```bash
-curl http://localhost:8010/health/
-```
-
-Check logs:
-
-```bash
-docker-compose logs zv-auth-service
+curl https://test.zonevast.com/api/v1/auth/health/
 ```
 
 ### GraphQL queries not working
 
 Verify query syntax using GraphQL playground:
+- Staging: https://test.zonevast.com/graphql/product
 - Production: https://api.zonevast.com/graphql/product
-- Development: http://localhost:3000/graphql/product
 
 ### Slow performance
 

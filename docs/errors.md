@@ -256,26 +256,19 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 - Preflight request failed
 
 **Solution**:
-```typescript
-// Configure API Gateway to allow your domain
-// Or use proxy in development
+Ensure you're using the correct API endpoint URL for your environment:
 
-// vite.config.ts
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8010',
-        changeOrigin: true
-      }
-    }
-  }
-});
+```typescript
+// For staging
+const API_BASE = 'https://test.zonevast.com/api/v1';
+
+// For production
+const API_BASE = 'https://api.zonevast.com/api/v1';
 ```
 
 **Prevention**:
-- Use proxy in development
-- Configure CORS on backend
+- Use correct environment URLs
+- Contact support if CORS issues persist
 - Use same domain in production
 
 ## Common Client Errors
@@ -478,18 +471,18 @@ fetch.interceptors.response.use(response => {
 
 ```bash
 # Access GraphQL playground
+# Staging: https://test.zonevast.com/graphql/product
 # Production: https://api.zonevast.com/graphql/product
-# Development: http://localhost:3000/graphql/product
 ```
 
 ### Check service health
 
 ```bash
 # Check if service is running
-curl http://localhost:8010/health/
+curl https://test.zonevast.com/api/v1/auth/health/
 
 # Or in browser
-fetch('http://localhost:8010/health/')
+fetch('https://test.zonevast.com/api/v1/auth/health/')
   .then(r => r.json())
   .then(console.log);
 ```
@@ -540,12 +533,7 @@ function logError(error: Error, context?: any) {
 
 ### Check logs
 
-```bash
-# Backend service logs
-docker-compose logs zv-auth-service
-
-# Or check CloudWatch in production
-```
+For production issues, check CloudWatch logs or contact support at support@zonevast.com
 
 ### Enable debug mode
 

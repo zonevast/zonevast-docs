@@ -3,14 +3,6 @@
 ## Purpose
 Inventory and stock management with 3D visualization for plant tracking.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/InventorySuite
-npm install
-npm run dev -p 3003
-```
-Access at: http://localhost:3003
-
 ## Key Features
 - Stock management and tracking
 - Multi-location inventory
@@ -30,3 +22,6 @@ Access at: http://localhost:3003
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/inventory`
+
+## Online Access
+Available at: https://test.zonevast.com/inventory

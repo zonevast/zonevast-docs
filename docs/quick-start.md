@@ -1,76 +1,19 @@
 # Quick Start Guide
 
-Get up and running with ZoneVast platform in minutes.
+Get started with ZoneVast API in minutes.
 
 ## Prerequisites
 
 Before you start, ensure you have:
+- Basic knowledge of REST APIs and/or GraphQL
+- A code editor or IDE
+- cURL or Postman for testing APIs (optional)
 
-- **Node.js 18+** and **npm** installed
-- **Python 3.9+** (for backend services)
-- **PostgreSQL 13+** running locally
-- **Git** for cloning repositories
-- Basic knowledge of React and TypeScript
+## Step 1: Get Your API Credentials
 
-## Step 1: Clone and Setup
+### Sign Up for an Account
 
-### Clone the Repository
-
-```bash
-git clone https://github.com/zonevast/platform.git
-cd platform
-```
-
-### Install Dependencies
-
-```bash
-# For the platform
-npm install
-```
-
-## Step 2: Environment Configuration
-
-Create environment configuration files:
-
-**For local development:**
-```bash
-# .env.local
-VITE_AUTH_REST_URL=http://localhost:8010/api/v1/auth
-VITE_THEME_GRAPHQL_URL=http://localhost:3000/theme/graphql
-VITE_CRM_GRAPHQL_URL=http://localhost:3000/graphql/crm
-```
-
-**For development server:**
-```bash
-# .env.development
-VITE_AUTH_REST_URL=https://dev-api.zonevast.com/api/v1/auth
-VITE_THEME_GRAPHQL_URL=https://test.zonevast.com/theme/graphql
-VITE_CRM_GRAPHQL_URL=/graphql/crm
-```
-
-**For production:**
-```bash
-# .env.production
-VITE_AUTH_REST_URL=https://api.zonevast.com/api/v1/auth
-VITE_THEME_GRAPHQL_URL=https://api.zonevast.com/theme/graphql
-VITE_CRM_GRAPHQL_URL=/graphql/crm
-```
-
-## Step 3: Start Development Server
-
-```bash
-npm run dev
-```
-
-The platform will be available at:
-- **URL**: http://localhost:5173
-- **Network**: http://192.168.x.x:5173 (for mobile testing)
-
-## Step 4: Create an Account
-
-### Option A: Register New Account
-
-1. Navigate to http://localhost:5173
+1. Navigate to https://test.zonevast.com
 2. Click "Register" or "Sign Up"
 3. Fill in the form:
    - Name: Your full name
@@ -78,181 +21,116 @@ The platform will be available at:
    - Password: (minimum 8 characters)
 4. Click "Register"
 
-### Option B: Use Demo Account
+### Get Your JWT Token
 
-For testing without backend:
+Once registered, authenticate to receive your JWT tokens:
 
-```typescript
-// These demo accounts work without backend
-Email: demo@example.com
-Password: any (works with any password)
+```bash
+curl -X POST https://test.zonevast.com/api/v1/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "your.email@example.com",
+    "password": "your_password"
+  }'
 ```
 
-```typescript
-// Or in your code
-import { useAuth } from '@/hooks/useAuth';
-
-const { login } = useAuth();
-await login({ email: 'demo@example.com', password: 'any' });
+Response:
+```json
+{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "user": {
+    "id": 1,
+    "email": "your.email@example.com",
+    "username": "yourname"
+  }
+}
 ```
 
-## Step 5: Make Your First API Call
+Save the `access` token - you'll need it for API requests.
+
+## Step 2: Make Your First API Call
 
 ### REST API Example
 
-```typescript
-// After logging in, make an authenticated request
-import { isAuthenticated } from '@/api/auth';
+```bash
+curl -X GET https://test.zonevast.com/api/v1/project/projects/ \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json"
+```
 
-if (isAuthenticated()) {
-  const token = localStorage.getItem('auth_token');
+Or with JavaScript:
 
-  const response = await fetch('/api/v1/project/projects/', {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  });
+```javascript
+const token = 'YOUR_ACCESS_TOKEN';
 
-  const projects = await response.json();
-  console.log('Projects:', projects);
-}
+const response = await fetch('https://test.zonevast.com/api/v1/project/projects/', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+});
+
+const projects = await response.json();
+console.log('Projects:', projects);
 ```
 
 ### GraphQL Example
 
-```typescript
-import { useQuery, gql } from '@apollo/client';
-
-const GET_SOLUTIONS = gql`
-  query GetSolutions {
-    solutions {
-      id
-      name
-      description
-    }
-  }
-`;
-
-function SolutionList() {
-  const { data, loading, error } = useQuery(GET_SOLUTIONS);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  return (
-    <ul>
-      {data.solutions.map(solution => (
-        <li key={solution.id}>
-          <h3>{solution.name}</h3>
-          <p>{solution.description}</p>
-        </li>
-      ))}
-    </ul>
-  );
-}
-```
-
-## Step 6: Build for Production
-
 ```bash
-npm run build
+curl -X POST https://test.zonevast.com/graphql/product \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "query GetProducts { products { id name price } }"
+  }'
 ```
 
-This creates an optimized production build in the `dist/` directory.
+Or with JavaScript:
 
-## Step 7: Preview Production Build
+```javascript
+const response = await fetch('https://test.zonevast.com/graphql/product', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    query: `
+      query GetProducts {
+        products {
+          id
+          name
+          price
+        }
+      }
+    `
+  })
+});
 
-```bash
-npm run preview
+const data = await response.json();
+console.log('Products:', data.data.products);
 ```
 
-Test the production build locally before deploying.
+## API Endpoints Reference
 
-## Service URLs Reference
+### Base URLs
 
-### Development Environment
+| Environment | REST API | GraphQL |
+|-------------|----------|---------|
+| Staging | `https://test.zonevast.com/api/v1` | `https://test.zonevast.com/graphql/{service}` |
+| Production | `https://api.zonevast.com/api/v1` | `https://api.zonevast.com/graphql/{service}` |
 
-| Service | URL |
-|---------|-----|
-| Platform Frontend | http://localhost:5173 |
-| Auth Service | http://localhost:8010 |
-| Product Service | http://localhost:8020 |
-| Inventory Service | http://localhost:8030 |
-| Order Service | http://localhost:8040 |
-| Kong Gateway | http://localhost:8000 |
+### Available Services
 
-### Staging Environment
-
-| Service | URL |
-|---------|-----|
-| API Base | https://dev-api.zonevast.com |
-| GraphQL (Theme) | https://test.zonevast.com/theme/graphql |
-| GraphQL (CRM) | https://test.zonevast.com/graphql/crm |
-
-### Production Environment
-
-| Service | URL |
-|---------|-----|
-| API Base | https://api.zonevast.com |
-| GraphQL (Theme) | https://api.zonevast.com/theme/graphql |
-| GraphQL (CRM) | https://api.zonevast.com/graphql/crm |
-
-## Common Tasks
-
-### Change Language
-
-```typescript
-// Language is stored in cookies
-document.cookie = 'language=ar; path=/';
-window.location.reload();
-```
-
-### Logout
-
-```typescript
-import { logout } from '@/api/auth';
-
-await logout();
-// Redirects to login page automatically
-```
-
-### Check Token Status
-
-```typescript
-import { isAuthenticated, getUserData } from '@/api/auth';
-
-if (isAuthenticated()) {
-  const user = getUserData();
-  console.log('Logged in as:', user.email);
-}
-```
-
-## Troubleshooting
-
-### "Failed to fetch" Error
-
-- Check if backend services are running
-- Verify environment variables are set correctly
-- Check browser console for CORS errors
-
-### "401 Unauthorized" Error
-
-- Your token may be expired
-- Try logging out and logging back in
-- Check that token is being sent in headers
-
-### GraphQL Errors
-
-- Verify GraphQL endpoint URL in environment variables
-- Check Apollo Client configuration
-- Review network tab in browser DevTools
-
-### Language Not Changing
-
-- Clear browser cookies
-- Ensure cookie is being set with correct path
-- Refresh page after changing language
+| Service | REST Path | GraphQL Endpoint |
+|---------|-----------|------------------|
+| Auth | `/api/v1/auth/` | N/A |
+| Product | `/api/v1/product/` | `/graphql/product` |
+| Inventory | `/api/v1/inventory/` | `/graphql/inventory` |
+| Orders | `/api/v1/orders/` | `/graphql/order` |
+| Billing | `/api/v1/billing/` | `/graphql/billing` |
+| Project | `/api/v1/project/` | `/graphql/project` |
 
 ## Next Steps
 

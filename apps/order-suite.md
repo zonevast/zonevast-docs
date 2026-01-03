@@ -3,14 +3,6 @@
 ## Purpose
 Order processing and fulfillment management.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/OrderSuite
-npm install
-npm run dev -p 3004
-```
-Access at: http://localhost:3004
-
 ## Key Features
 - Order creation and management
 - Order status workflow
@@ -29,3 +21,6 @@ Access at: http://localhost:3004
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/order`
+
+## Online Access
+Available at: https://test.zonevast.com/orders

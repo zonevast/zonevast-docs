@@ -3,14 +3,6 @@
 ## Purpose
 Product catalog management application. Manage products, categories, brands, collections, discounts, and coupons.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/ProductSuite
-npm install
-npm run dev -p 3002
-```
-Access at: http://localhost:3002
-
 ## Key Features
 - Product catalog with variants
 - Category and brand management
@@ -28,3 +20,6 @@ Access at: http://localhost:3002
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/product`
+
+## Online Access
+Available at: https://test.zonevast.com/products

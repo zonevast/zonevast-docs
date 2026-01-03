@@ -3,13 +3,8 @@
 ## Purpose
 Main portal and landing page for ZoneVast platform.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/Portal
-npm install
-npm run dev -p 3001
-```
-Access at: http://localhost:3001
+## Description
+The Portal serves as the main entry point and handles initial routing to other Suite applications.
 
 ## Key Features
 - Dynamic routing
@@ -25,5 +20,5 @@ Access at: http://localhost:3001
 - @nextui-org/react
 - next-intl
 
-## Notes
-The Portal serves as the main entry point and handles initial routing to other Suite applications.
+## Online Access
+Available at: https://test.zonevast.com

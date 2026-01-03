@@ -3,14 +3,6 @@
 ## Purpose
 Content management system for blog posts and articles.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/BlogSuite
-npm install
-npm run dev -p 3007
-```
-Access at: http://localhost:3007
-
 ## Key Features
 - Blog post creation and editing
 - Rich text editor (TinyMCE)
@@ -30,3 +22,6 @@ Access at: http://localhost:3007
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/content`
+
+## Online Access
+Available at: https://test.zonevast.com/blog

@@ -3,14 +3,6 @@
 ## Purpose
 Repair service management with scheduling and tracking.
 
-## Local Development
-```bash
-cd /home/yousef/Documents/workspace/zonevast/apps/RepairPro
-npm install
-npm run dev -p 3006
-```
-Access at: http://localhost:3006
-
 ## Key Features
 - Repair request creation
 - Service scheduling (BigCalendar)
@@ -30,3 +22,6 @@ Access at: http://localhost:3006
 
 ## GraphQL Endpoint
 `https://test.zonevast.com/graphql/repair`
+
+## Online Access
+Available at: https://test.zonevast.com/repair
