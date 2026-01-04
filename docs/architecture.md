@@ -1,6 +1,6 @@
 # ZoneVast Architecture Overview
 
-ZoneVast is a comprehensive microservices ecosystem with frontend applications, backend services, and an API Gateway layer.
+ZoneVast is a microservices platform with frontend applications, backend services, and an API Gateway layer.
 
 ## System Architecture
 
@@ -8,35 +8,28 @@ ZoneVast is a comprehensive microservices ecosystem with frontend applications, 
 graph TB
     Frontend[Frontend Applications]
     Gateway[API Gateway<br/>test.zonevast.com]
-    Auth[Auth Service]
-    Product[Product Service]
-    Order[Order Service]
-    Inventory[Inventory Service]
-    Billing[Billing Service]
-    POS[POS Service]
-    Project[Project Service]
-    Catalog[Catalog Service]
-    Credit[Credit Service]
-    Admin[Admin Service]
+    Auth[Auth Service<br/>REST]
+    Project[Project Service<br/>REST]
+    Product[Product<br/>GraphQL]
+    Order[Order<br/>GraphQL]
+    Inventory[Inventory<br/>GraphQL]
+    Billing[Billing<br/>GraphQL]
+    POS[POS<br/>GraphQL]
     Cache[Redis Cache]
     MQ[RabbitMQ Message Queue]
     Storage[File Storage]
 
     Frontend --> Gateway
     Gateway --> Auth
+    Gateway --> Project
     Gateway --> Product
     Gateway --> Order
     Gateway --> Inventory
     Gateway --> Billing
     Gateway --> POS
-    Gateway --> Project
-    Gateway --> Catalog
-    Gateway --> Credit
-    Gateway --> Admin
 
     Auth --> Cache
-    Product --> Cache
-    Order --> Cache
+    Project --> Cache
 
     Order --> MQ
     Inventory --> MQ
@@ -51,16 +44,16 @@ Frontend apps are built with **Next.js 14**, **React 18**, and **TypeScript**.
 
 ### Applications Overview
 
-| Application | Description | Tech Stack |
-|-------------|-------------|------------|
-| **Portal** | Main entry point, authentication, dashboard | Next.js, NextUI |
-| **ProductSuite** | Product catalog management | Next.js, Recharts |
-| **InventorySuite** | Stock management, reservations | Next.js, D3.js |
-| **OrderSuite** | Order processing, fulfillment | Next.js, Framer Motion |
-| **DebtPro** | Debt tracking and management | Next.js, React Query |
-| **RepairPro** | Repair service management | Next.js, Zustand |
-| **BlogSuite** | Content management system | Next.js, MDX |
-| **CustomerSuite** | CRM and customer management | Next.js, React Hook Form |
+| Application | Description | URL |
+|-------------|-------------|-----|
+| **Portal** | Main entry point, authentication, dashboard | https://test.zonevast.com |
+| **ProductSuite** | Product catalog management | https://test.zonevast.com/products |
+| **InventorySuite** | Stock management, reservations | https://test.zonevast.com/inventory |
+| **OrderSuite** | Order processing, fulfillment | https://test.zonevast.com/orders |
+| **DebtPro** | Debt tracking and management | https://test.zonevast.com/debt |
+| **RepairPro** | Repair service management | https://test.zonevast.com/repair |
+| **BlogSuite** | Content management system | https://test.zonevast.com/blog |
+| **CustomerSuite** | CRM and customer management | https://test.zonevast.com/customers |
 
 ### Frontend Architecture
 
@@ -76,36 +69,29 @@ Frontend apps are built with **Next.js 14**, **React 18**, and **TypeScript**.
 - **Authentication**: JWT tokens with localStorage/cookies
 - **Styling**: Tailwind CSS with custom theme
 
-### Frontend Communication
-
-Frontend apps communicate with backend through:
-- **REST API**: Direct calls to services
-- **GraphQL**: Apollo Client with code generation
-- **API Gateway**: All traffic goes through SAM Gateway
-
 ## Backend Services
 
-Backend services are built with **Django** and **Django REST Framework**.
+### REST Services (Online)
 
-### Core Services
+| Service | Description | Base URL |
+|---------|-------------|----------|
+| **Auth Service** | Authentication, JWT tokens, RBAC | `https://test.zonevast.com/api/v1/auth` |
+| **Project Service** | Project management, file attachments | `https://test.zonevast.com/api/v1/projects` |
 
-| Service | Description |
-|---------|-------------|
-| **zv-auth-service** | Authentication, JWT tokens, RBAC |
-| **zv-product-eco-service** | Product catalog, categories, tags |
-| **zv-inventory-eco-service** | Stock management, reservations |
-| **zv-order-eco-service** | Order processing, fulfillment |
-| **zv-billing-eco-service** | Payment processing, invoicing |
-| **zv-pos-eco-service** | Point of sale, in-store transactions |
-| **zv-project-service** | Project management, file attachments |
-| **zv_catalog_service** | Service catalog and marketplace |
-| **zv_credit_finance_service** | Credit and finance management |
-| **zv_admin_interface** | Admin dashboard and monitoring |
+### GraphQL Services (Online)
+
+| Service | Description | GraphQL Endpoint |
+|---------|-------------|------------------|
+| **Product** | Product catalog, categories, pricing | `https://test.zonevast.com/graphql/product` |
+| **Order** | Order processing, fulfillment, tracking | `https://test.zonevast.com/graphql/order` |
+| **Inventory** | Stock management, reservations, movements | `https://test.zonevast.com/graphql/inventory` |
+| **Billing** | Payments, invoices, subscriptions | `https://test.zonevast.com/graphql/billing` |
+| **POS** | Point of sale, in-store transactions | `https://test.zonevast.com/graphql/pos` |
 
 ### Backend Architecture
 
 - **Framework**: Django 4.2+ with Django REST Framework
-- **API Style**: REST (primary), GraphQL (via Graphene)
+- **API Style**: REST (Auth, Project), GraphQL (Product, Order, Inventory, Billing, POS)
 - **Authentication**: JWT tokens (djangorestframework-simplejwt)
 - **Message Broker**: RabbitMQ for async tasks
 - **Caching**: Redis for session and query caching
@@ -126,27 +112,28 @@ The API Gateway layer routes all incoming requests to appropriate services.
 
 **Gateway URL**: `https://test.zonevast.com`
 
-### Routing Patterns
+### REST API Pattern
 
-**REST API Pattern:**
 ```
-https://test.zonevast.com/api/v1/{service-name}/{endpoint}
-```
-
-Examples:
-- `https://test.zonevast.com/api/v1/auth/login/`
-- `https://test.zonevast.com/api/v1/product/products/`
-- `https://test.zonevast.com/api/v1/inventory/items/`
-
-**GraphQL Pattern:**
-```
-https://test.zonevast.com/graphql/{service-name}
+https://test.zonevast.com/api/v1/{service}/{endpoint}
 ```
 
-Examples:
-- `https://test.zonevast.com/graphql/product`
-- `https://test.zonevast.com/graphql/inventory`
-- `https://test.zonevast.com/graphql/order`
+**Examples:**
+- Auth: `https://test.zonevast.com/api/v1/auth/login/`
+- Project: `https://test.zonevast.com/api/v1/projects/`
+
+### GraphQL Pattern
+
+```
+https://test.zonevast.com/graphql/{service}
+```
+
+**Examples:**
+- Product: `https://test.zonevast.com/graphql/product`
+- Order: `https://test.zonevast.com/graphql/order`
+- Inventory: `https://test.zonevast.com/graphql/inventory`
+- Billing: `https://test.zonevast.com/graphql/billing`
+- POS: `https://test.zonevast.com/graphql/pos`
 
 ### Gateway Features
 
@@ -159,28 +146,18 @@ Examples:
 
 ## Base URLs
 
-### Staging (Test Environment)
-
 | Type | URL |
 |------|-----|
 | REST API | `https://test.zonevast.com/api/v1` |
 | GraphQL | `https://test.zonevast.com/graphql/{service}` |
 | Frontend | `https://test.zonevast.com` |
 
-### Production
-
-| Type | URL |
-|------|-----|
-| REST API | `https://api.zonevast.com/api/v1` |
-| GraphQL | `https://api.zonevast.com/graphql/{service}` |
-| Frontend | `https://zonevast.com` |
-
 ## Data Flow
 
 ### Authentication Flow
 
 ```
-1. User → Frontend (Portal) → Login Request
+1. User → Frontend → Login Request
 2. Frontend → API Gateway → Auth Service (/api/v1/auth/login/)
 3. Auth Service → Validate credentials
 4. Auth Service → Generate JWT token
@@ -188,17 +165,6 @@ Examples:
 6. Frontend → Store token in localStorage/cookie
 7. Frontend → Include token in Authorization header
 8. API Gateway → Validate JWT on every request
-```
-
-### API Request Flow
-
-```
-1. Frontend → API Request with JWT
-2. API Gateway → Validate JWT token
-3. API Gateway → Route to appropriate service
-4. Service → Process request
-5. Service → Response to API Gateway
-6. API Gateway → Response to Frontend
 ```
 
 ### GraphQL Flow
@@ -211,26 +177,6 @@ Examples:
 5. Service → Return JSON response
 6. Frontend → Update UI with data
 ```
-
-## Infrastructure
-
-### Caching Layer
-
-- **Redis**: Session storage, query caching
-- **TTL**: Configurable cache expiration
-- **Cache invalidation**: Manual and automatic
-
-### Message Queue
-
-- **RabbitMQ**: Asynchronous task processing
-- **Queues**: Service-specific queues
-- **Exchanges**: Topic-based routing
-
-### File Storage
-
-- **S3-compatible**: Object storage
-- **Buckets**: Organized by service and type
-- **CDN**: CloudFront for static assets
 
 ## Security
 
@@ -268,8 +214,6 @@ Examples:
 - **Connection pooling**: Efficient resource usage
 
 ## Deployment
-
-### Production
 
 - **AWS Lambda**: Serverless deployment
 - **ECS Containers**: Docker container orchestration

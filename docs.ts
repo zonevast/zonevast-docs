@@ -1,14 +1,12 @@
 export interface DocItem {
   id: string;
   title: string;
-  path?: string; // Path to .md file
-  children?: DocItem[]; // Parent nodes have children
-  isExternal?: boolean; // If true, fetches from the configured GitHub repo
-  type?: 'doc' | 'api'; // Categorize for filtering
+  path?: string;
+  children?: DocItem[];
+  isExternal?: boolean;
+  type?: 'doc' | 'api';
 }
 
-// Configuration for remote documentation
-// Set enabled to false to use local /public/docs/*.md files
 export const GITHUB_DOCS_CONFIG = {
   owner: 'zonevast',
   repo: 'zonevast-docs',
