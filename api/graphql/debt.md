@@ -14,25 +14,13 @@ The Debt GraphQL service provides comprehensive debt management functionality in
 ### Production
 
 ```
-https://api.zonevast.com/graphql/debt/en/v1/graphql
+https://api.zonevast.com/graphql/debt
 ```
 
-### Development
+### Test
 
 ```
-https://dev-api.zonevast.com/graphql/debt/en/v1/graphql
-```
-
-### Local (via SAM Gateway)
-
-```
-http://localhost:3000/graphql/debt/en/v1/graphql
-```
-
-### Local (direct service)
-
-```
-http://localhost:4011/graphql
+https://test.zonevast.com/graphql/debt
 ```
 
 ## Authentication
@@ -1423,7 +1411,7 @@ query PaginateContracts {
 
 ```bash
 # Set environment variables
-export DEBT_GRAPHQL_URL="http://localhost:4011/graphql"
+export DEBT_GRAPHQL_URL="https://test.zonevast.com/graphql/debt"
 export JWT_TOKEN="your_jwt_token_here"
 ```
 

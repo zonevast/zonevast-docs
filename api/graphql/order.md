@@ -2,8 +2,7 @@
 
 **Service:** `order-graphql`
 **Version:** v1
-**Default Port:** 4001
-**Base URL:** `http://localhost:4001/graphql` (local) | `https://api.zonevast.com/graphql/order/en/v1/graphql` (production)
+**Base URL:** `https://test.zonevast.com/graphql/order`
 
 ## Overview
 
@@ -14,7 +13,7 @@ The Order GraphQL service handles order management, order products (line items),
 All mutations require JWT authentication. Include the token in the Authorization header:
 
 ```bash
-curl -X POST http://localhost:4001/graphql \
+curl -X POST https://test.zonevast.com/graphql/order \
   -H "Authorization: Bearer <your-jwt-token>" \
   -H "Content-Type: application/json" \
   -d '{"query": "..."}'
@@ -858,7 +857,7 @@ mutation CreateReturn {
 ### Create Order
 
 ```bash
-curl -X POST http://localhost:4001/graphql \
+curl -X POST https://test.zonevast.com/graphql/order \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -878,7 +877,7 @@ curl -X POST http://localhost:4001/graphql \
 ### Query Orders
 
 ```bash
-curl -X POST http://localhost:4001/graphql \
+curl -X POST https://test.zonevast.com/graphql/order \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -977,7 +976,7 @@ query SortOrders {
 For models with `translatable: true`, query with language header:
 
 ```bash
-curl -X POST http://localhost:4001/graphql \
+curl -X POST https://test.zonevast.com/graphql/order \
   -H "Accept-Language: ar" \
   -H "Content-Type: application/json" \
   -d '{"query": "query { statuses { name description } }"}'
@@ -990,26 +989,7 @@ Translatable fields:
 
 ## Deployment
 
-### Local Development
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/order-graphql
-python3 handler.py
-```
-
-### SAM Gateway (Local)
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/sam-api-gateway
-sam build
-sam local start-api --port 3000
-```
-
-Access via: `http://localhost:3000/graphql/order/en/v1/graphql`
-
-### Production
-
-Deploy via micrzone:
+### Deploy to Lambda
 
 ```bash
 micrzone update order-graphql dev
@@ -1020,15 +1000,15 @@ micrzone update order-graphql dev
 ## Health Check
 
 ```bash
-curl http://localhost:4001/health
+curl https://test.zonevast.com/graphql/order -H "Content-Type: application/json" -d '{"query": "{ __typename }"}'
 ```
 
 Response:
 ```json
 {
-  "status": "healthy",
-  "service": "order-graphql",
-  "version": "v1"
+  "data": {
+    "__typename": "Query"
+  }
 }
 ```
 

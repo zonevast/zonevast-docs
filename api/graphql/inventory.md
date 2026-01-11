@@ -5,9 +5,8 @@ Auto-API GraphQL service for inventory management, stock tracking, and warehouse
 ## Base URL
 
 ```
-Production: https://api.zonevast.com/graphql/inventory/v1/graphql
-Test: https://test.zonevast.com/inventory/graphql
-Local: http://localhost:4002/graphql
+Production: https://api.zonevast.com/graphql/inventory
+Test: https://test.zonevast.com/graphql/inventory
 ```
 
 ## Authentication

@@ -35,7 +35,6 @@ The Console GraphQL service provides a complete API for managing developer conso
 |------------|------------------|
 | **Production** | `https://api.zonevast.com/graphql/console` |
 | **Staging** | `https://test.zonevast.com/graphql/console` |
-| **Local** | `http://localhost:4013/graphql` |
 
 ### Current Deployment Status
 
@@ -1269,12 +1268,12 @@ query GetMutations {
 
 ```bash
 # Simple query
-curl -X POST http://localhost:4013/graphql \
+curl -X POST https://test.zonevast.com/graphql/console \
   -H "Content-Type: application/json" \
   -d '{"query": "query { consoleProjects { edges { id name } } }"}'
 
 # Authenticated mutation
-curl -X POST http://localhost:4013/graphql \
+curl -X POST https://test.zonevast.com/graphql/console \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{"query": "mutation { createConsoleProject(input: {name: \"Test\"}) { id name } }"}'
@@ -1283,7 +1282,7 @@ curl -X POST http://localhost:4013/graphql \
 ### Using GraphQL Playground
 
 1. Open GraphQL Playground or Postman
-2. Set URL to: `http://localhost:4013/graphql`
+2. Set URL to: `https://test.zonevast.com/graphql/console`
 3. Add header: `Authorization: Bearer YOUR_TOKEN` (for mutations)
 4. Execute queries
 
@@ -1329,7 +1328,7 @@ Accept-Language: ar
 
 ## Deployment
 
-### Local Development
+### Deploy to Lambda
 
 ```bash
 cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/console-graphql
@@ -1337,15 +1336,6 @@ cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/c
 # Run migrations
 python3 manage.py migrate
 
-# Start server
-python3 manage.py runserver --port 4013
-
-# Access at http://localhost:4013/graphql
-```
-
-### Deploy to Lambda
-
-```bash
 # Deploy to staging
 python3 deploy_lambda.py
 

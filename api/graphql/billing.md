@@ -5,9 +5,8 @@ Auto-API GraphQL service for billing operations, invoicing, subscriptions, and p
 ## Base URL
 
 ```
-Production: https://api.zonevast.com/graphql/billing/v1/graphql
-Test: https://test.zonevast.com/billing/graphql
-Local: http://localhost:4003/graphql
+Production: https://api.zonevast.com/graphql/billing
+Test: https://test.zonevast.com/graphql/billing
 ```
 
 ## Authentication
@@ -852,8 +851,8 @@ curl -X POST https://test.zonevast.com/billing/graphql \
   -H "Authorization: Bearer TOKEN" \
   -d '{"query": "{ coupons { id key discountValue } }"}'
 
-# Local testing
-curl -X POST http://localhost:4003/graphql \
+# Online testing
+curl -X POST https://test.zonevast.com/graphql/billing \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TOKEN" \
   -d '{"query": "mutation { createCoupon(input: {key: \"TEST20\", discountType: \"percentage\", discountValue: 20.0}) { id key } }"}'

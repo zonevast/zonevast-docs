@@ -10,10 +10,8 @@ Point of Sale (POS) GraphQL microservice for handling in-store transactions, cus
 - **Repository**: `/services/graphql/autoapi-projects/pos-graphql/`
 
 **Base URLs**
-- **Local (Direct)**: `http://localhost:4004/graphql`
-- **Local (SAM Gateway)**: `http://localhost:3000/graphql/pos/en/v1/graphql`
-- **Development**: `https://dev-api.zonevast.com/graphql/pos/en/v1/graphql`
-- **Production**: `https://api.zonevast.com/graphql/pos/en/v1/graphql`
+- **Production:** `https://api.zonevast.com/graphql/pos`
+- **Test:** `https://test.zonevast.com/graphql/pos`
 
 ---
 
@@ -201,8 +199,8 @@ Content-Type: application/json
 Get JWT tokens from the `zv-auth-service`:
 
 ```bash
-# Local
-curl -X POST http://localhost:8010/api/v1/auth/login/ \
+# Test
+curl -X POST https://test.zonevast.com/api/v1/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin123"}'
 
@@ -823,17 +821,11 @@ python3 manage.py test tests.crud.test_sale.TestSaleCRUD.test_create_sale_minima
 ### Health Check
 
 ```bash
-# Local (direct)
-curl http://localhost:4004/health
-
-# Local (SAM Gateway)
-curl http://localhost:3000/health
-
-# Development
-curl https://dev-api.zonevast.com/health
+# Test
+curl https://test.zonevast.com/graphql/pos -H "Content-Type: application/json" -d '{"query": "{ __typename }"}'
 
 # Production
-curl https://api.zonevast.com/health
+curl https://api.zonevast.com/graphql/pos -H "Content-Type: application/json" -d '{"query": "{ __typename }"}'
 ```
 
 ---
@@ -1005,7 +997,7 @@ cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/p
 python3 handler.py
 ```
 
-Service will start on `http://localhost:4004/graphql`
+Service is deployed to: `https://test.zonevast.com/graphql/pos`
 
 ---
 

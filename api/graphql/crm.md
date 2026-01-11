@@ -30,7 +30,6 @@ The CRM GraphQL service provides a complete API for managing customer relationsh
 |------------|------------------|
 | **Production** | `https://api.zonevast.com/graphql/crm` |
 | **Staging** | `https://test.zonevast.com/graphql/crm` |
-| **Local** | `http://localhost:4014/graphql` |
 
 ### Current Deployment Status
 
@@ -55,7 +54,7 @@ The CRM service uses a hybrid authentication model:
 For public forms (website contact forms, landing pages):
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -d '{"query": "mutation { createContactMessage(...) }"}'
 ```
@@ -67,7 +66,7 @@ curl -X POST http://localhost:4014/graphql \
 For admin operations (viewing, updating, deleting):
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '{"query": "query { contactMessages }"}'
@@ -859,7 +858,7 @@ The GraphQL API uses **camelCase** for field names:
 ### Test Contact Form Submission
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation { createContactMessage(input: {name: \"Test User\", email: \"test@example.com\", subject: \"Test Inquiry\", message: \"This is a test message\"}) { id name email subject createdAt } }"
@@ -884,7 +883,7 @@ curl -X POST http://localhost:4014/graphql \
 ### Test Project Brief Submission
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation { createProjectBrief(input: {contactName: \"John Doe\", contactEmail: \"john@example.com\", contactPhone: \"+1234567890\", budgetMin: \"5000\", budgetMax: \"10000\", paymentMethod: \"milestone\", status: \"new\"}) { id contactName contactEmail status createdAt } }"
@@ -894,7 +893,7 @@ curl -X POST http://localhost:4014/graphql \
 ### Test Sales Request Submission
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation { createSalesRequest(input: {name: \"Jane Smith\", email: \"jane@example.com\", phone: \"+1987654321\", preferredDate: \"2026-02-01T10:00:00\", preferredTime: \"2:00 PM\", message: \"Interested in enterprise solution\", status: \"pending\"}) { id name email preferredDate preferredTime status } }"
@@ -920,7 +919,7 @@ curl -X POST http://localhost:4014/graphql \
 ### Test Custom Template Request
 
 ```bash
-curl -X POST http://localhost:4014/graphql \
+curl -X POST https://test.zonevast.com/graphql/crm \
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation { createCustomTemplateRequest(input: {name: \"Acme Corp\", email: \"contact@acme.com\", requirements: \"Need custom e-commerce theme\", budget: 15000, deadline: \"2026-03-15T00:00:00\", status: \"pending\"}) { id name email budget deadline status } }"
@@ -1167,37 +1166,19 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ---
 
-## Local Development
+## Deployment
 
-### Start Service
+### Deploy to Lambda
 
 ```bash
 cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/crm-graphql
 
-# Run migrations
-python3 manage.py migrate
+# Build deployment package
+python3 deploy_lambda.py
 
-# Start server
-python3 handler.py
-
-# Service starts on http://localhost:4014/graphql
+# Or using manage.py
+python3 manage.py deploy staging
 ```
-
-### Test Endpoint
-
-```bash
-# Health check
-curl http://localhost:4014/graphql
-
-# Introspection
-curl -X POST http://localhost:4014/graphql \
-  -H "Content-Type: application/json" \
-  -d '{"query": "query { __typename }"}'
-```
-
-### Access GraphQL Playground
-
-Open browser to: `http://localhost:4014/graphql`
 
 ---
 
@@ -1267,20 +1248,6 @@ CREATE TABLE custom_template_requests (
 ```
 
 ---
-
-## Deployment
-
-### Deploy to Lambda (when ready)
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/crm-graphql
-
-# Build deployment package
-python3 deploy_lambda.py
-
-# Or using manage.py
-python3 manage.py deploy staging
-```
 
 ### Environment Variables
 

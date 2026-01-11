@@ -17,19 +17,14 @@ The **repair-graphql** service provides a complete repair management system with
 
 ### Endpoints
 
-**Local Development:**
+**Production:**
 ```
-http://localhost:4010/graphql
-```
-
-**Production (via SAM Gateway):**
-```
-https://api.zonevast.com/graphql/repair/en/v1/graphql
+https://api.zonevast.com/graphql/repair
 ```
 
-**Development (via SAM Gateway):**
+**Test:**
 ```
-http://localhost:3000/graphql/repair/en/v1/graphql
+https://test.zonevast.com/graphql/repair
 ```
 
 ## Architecture
@@ -1110,7 +1105,7 @@ X-Project-ID: <project_id>
 
 ```bash
 # Login to get token
-curl -X POST http://localhost:8010/api/v1/auth/auth/token/ \
+curl -X POST https://test.zonevast.com/api/v1/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin123"}'
 ```
@@ -1118,7 +1113,7 @@ curl -X POST http://localhost:8010/api/v1/auth/auth/token/ \
 ### Authenticated Request
 
 ```bash
-curl -X POST http://localhost:4010/graphql \
+curl -X POST https://test.zonevast.com/graphql/repair \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1130,37 +1125,17 @@ curl -X POST http://localhost:4010/graphql \
 
 ## Testing
 
-### Local Testing
-
-```bash
-# Start the service
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/repair-graphql
-python3 handler.py
-
-# Service runs on http://localhost:4010/graphql
-```
-
-### Run Tests
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/repair-graphql
-python3 -m pytest tests/ -v
-
-# Run specific test
-python3 -m pytest tests/test_repairs.py::test_create_repair_basic -v
-```
-
-### Example Test Queries
+### Test Queries
 
 ```bash
 # List repairs (requires admin token)
-curl -X POST http://localhost:4010/graphql \
+curl -X POST https://test.zonevast.com/graphql/repair \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"query": "{ repairs { id priority estimatedCost } }"}'
 
 # Create repair
-curl -X POST http://localhost:4010/graphql \
+curl -X POST https://test.zonevast.com/graphql/repair \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1179,7 +1154,7 @@ curl -X POST http://localhost:4010/graphql \
   }'
 
 # Get repair by ID
-curl -X POST http://localhost:4010/graphql \
+curl -X POST https://test.zonevast.com/graphql/repair \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"query": "{ repair(id: 1) { id notes diagnosis resolution } }"}'
@@ -1353,18 +1328,13 @@ pending → in_progress → completed
 
 ---
 
-## Migration and Deployment
-
-### Database Migration
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/repair-graphql
-python3 manage.py migrate
-```
+## Deployment
 
 ### Deploy to Lambda
 
 ```bash
+cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/repair-graphql
+python3 manage.py migrate
 python3 deploy_lambda.py
 ```
 

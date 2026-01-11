@@ -1,9 +1,8 @@
 # Project Service API Reference
 
 **Service Name:** zv-project-service
-**Service Port:** 8070
-**Base URL:** `/api/v1/project/`
-**Health Check:** `/health/` or `/api/v1/project/health/`
+**Base URL:** `https://test.zonevast.com/api/v1/project/`
+**Health Check:** `https://test.zonevast.com/api/v1/project/health/`
 
 ## Overview
 
@@ -1324,11 +1323,11 @@ curl https://test.zonevast.com/api/v1/project/project/info/myproject/
 
 ## Swagger Documentation
 
-Interactive API documentation is available:
+Interactive API documentation is available at `https://test.zonevast.com`:
 
-- **Swagger UI**: `/swagger/`
-- **ReDoc**: `/redoc/`
-- **OpenAPI JSON**: `/swagger.json`
+- **Swagger UI**: `https://test.zonevast.com/swagger/`
+- **ReDoc**: `https://test.zonevast.com/redoc/`
+- **OpenAPI JSON**: `https://test.zonevast.com/swagger.json`
 
 ---
 

@@ -63,10 +63,8 @@ The Customer GraphQL Service provides comprehensive CRM (Customer Relationship M
 
 | Environment | Endpoint |
 |-------------|----------|
-| **Local Development** | `http://localhost:4005/graphql` |
-| **Via SAM Gateway (Local)** | `http://localhost:3000/graphql/customer/en/v1/graphql` |
-| **Production** | `https://api.zonevast.com/graphql/customer/en/v1/graphql` |
-| **Development** | `https://dev-api.zonevast.com/graphql/customer/en/v1/graphql` |
+| **Production** | `https://api.zonevast.com/graphql/customer` |
+| **Test** | `https://test.zonevast.com/graphql/customer` |
 
 ---
 
@@ -106,7 +104,7 @@ curl -X POST https://api.zonevast.com/api/v1/auth/login/ \
 ### Using the Token
 
 ```bash
-curl -X POST http://localhost:4005/graphql \
+curl -X POST https://test.zonevast.com/graphql/customer \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..." \
   -H "x-project-id: 1" \
   -H "Content-Type: application/json" \
@@ -1805,7 +1803,7 @@ query {
 ### 1. Always Include Required Headers
 
 ```bash
-curl -X POST http://localhost:4005/graphql \
+curl -X POST https://test.zonevast.com/graphql/customer \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "x-project-id: 1" \
   -H "Content-Type: application/json" \
@@ -2032,7 +2030,7 @@ query {
 
 **Query:**
 ```bash
-curl -X POST http://localhost:4005/graphql \
+curl -X POST https://test.zonevast.com/graphql/customer \
   -H "x-project-id: 1" \
   -H "Content-Type: application/json" \
   -d '{
@@ -2042,7 +2040,7 @@ curl -X POST http://localhost:4005/graphql \
 
 **Mutation:**
 ```bash
-curl -X POST http://localhost:4005/graphql \
+curl -X POST https://test.zonevast.com/graphql/customer \
   -H "x-project-id: 1" \
   -H "Content-Type: application/json" \
   -d '{
@@ -2055,7 +2053,7 @@ curl -X POST http://localhost:4005/graphql \
 ### Using Postman
 
 1. Set method to `POST`
-2. URL: `http://localhost:4005/graphql`
+2. URL: `https://test.zonevast.com/graphql/customer`
 3. Headers:
    - `x-project-id`: `1`
    - `Authorization`: `Bearer YOUR_TOKEN`
@@ -2071,7 +2069,7 @@ curl -X POST http://localhost:4005/graphql \
 
 ### Using GraphQL Playground
 
-Navigate to `http://localhost:4005/graphql` in your browser to use the built-in GraphQL Playground (if enabled).
+Navigate to `https://test.zonevast.com/graphql/customer` in your browser to use the built-in GraphQL Playground (if enabled).
 
 ---
 

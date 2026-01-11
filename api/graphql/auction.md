@@ -32,7 +32,6 @@ The Auction GraphQL service provides a complete API for managing auction listing
 |------------|------------------|
 | **Production** | `https://api.zonevast.com/graphql/auction` |
 | **Staging** | `https://test.zonevast.com/graphql/auction` |
-| **Local** | `http://localhost:4009/graphql` |
 
 ### Service Configuration
 
@@ -52,7 +51,7 @@ The Auction GraphQL service provides a complete API for managing auction listing
 Most mutations require authentication. Include JWT token in the Authorization header:
 
 ```bash
-curl -X POST http://localhost:4009/graphql \
+curl -X POST https://test.zonevast.com/graphql/auction \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '{"query": "mutation { createAuction(...) }"}'
@@ -62,7 +61,7 @@ curl -X POST http://localhost:4009/graphql \
 
 ```bash
 # Login via auth service
-curl -X POST http://localhost:3000/api/v1/auth/login/ \
+curl -X POST https://test.zonevast.com/api/v1/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username": "your_username", "password": "your_password"}'
 ```
@@ -959,7 +958,7 @@ query GetSortedAuctions {
 ### Test Auction Creation
 
 ```bash
-curl -X POST http://localhost:4009/graphql \
+curl -X POST https://test.zonevast.com/graphql/auction \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '{
@@ -982,7 +981,7 @@ curl -X POST http://localhost:4009/graphql \
 ### Test Query Auctions
 
 ```bash
-curl -X POST http://localhost:4009/graphql \
+curl -X POST https://test.zonevast.com/graphql/auction \
   -H "Content-Type: application/json" \
   -d '{
     "query": "query { auctions(filter: { status: { equals: \"active\" } }) { id title slug startPrice currentBid status } }"
@@ -992,7 +991,7 @@ curl -X POST http://localhost:4009/graphql \
 ### Test Create Bid
 
 ```bash
-curl -X POST http://localhost:4009/graphql \
+curl -X POST https://test.zonevast.com/graphql/auction \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '{
@@ -1010,7 +1009,7 @@ curl -X POST http://localhost:4009/graphql \
 ### Test Group Buying
 
 ```bash
-curl -X POST http://localhost:4009/graphql \
+curl -X POST https://test.zonevast.com/graphql/auction \
   -H "Content-Type: application/json" \
   -d '{
     "query": "query { groupBuyings { id title slug originalPrice dealPrice minParticipants currentParticipants isUnlocked status } }"
@@ -1028,21 +1027,7 @@ cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/a
 python3 deploy_lambda.py
 ```
 
-### Local Development
-
-```bash
-cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/auction-graphql
-python3 handler.py
-```
-
-Service runs on `http://localhost:4009/graphql`
-
-### Configuration
-
-**deploy_config.json:**
-- Lambda function name
-- API Gateway configuration
-- Environment variables
+### Environment Variables
 
 **Environment Variables:**
 - `JWT_SECRET` - JWT signing secret

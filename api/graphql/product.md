@@ -31,7 +31,6 @@ The Product GraphQL service provides a complete API for managing products, categ
 |------------|------------------|
 | **Production** | `https://api.zonevast.com/graphql/product` |
 | **Staging** | `https://test.zonevast.com/graphql/product` |
-| **Local** | `http://localhost:4000/graphql` |
 
 ### Current Deployment Status
 
@@ -704,7 +703,7 @@ query {
 
 ## Deployment
 
-### Local Development
+### Deploy to Lambda
 
 ```bash
 cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/product-graphql
@@ -712,10 +711,11 @@ cd /home/yousef/Documents/workspace/zonevast/services/graphql/autoapi-projects/p
 # Run migrations
 python3 manage.py migrate
 
-# Start server
-python3 manage.py runserver --port 4000
+# Deploy to staging
+python3 deploy_lambda.py
 
-# Access at http://localhost:4000/graphql
+# Or via manage.py
+python3 manage.py deploy staging
 ```
 
 ### Deploy to Lambda
