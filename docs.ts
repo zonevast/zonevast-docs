@@ -132,6 +132,129 @@ export const ALL_DOCS_DATA: DocItem[] = [
         path: '/apps/blog-suite.md',
         isExternal: true,
         type: 'doc'
+      },
+      {
+        id: 'auction',
+        title: 'Auction',
+        path: '/apps/auction.md',
+        isExternal: true,
+        type: 'doc'
+      }
+    ]
+  },
+
+  // --- GRAPHQL APIS ---
+  {
+    id: 'graphql-apis',
+    title: 'GraphQL Services',
+    type: 'api',
+    children: [
+      {
+        id: 'product-graphql',
+        title: 'Product GraphQL',
+        path: '/api/graphql/product.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'inventory-graphql',
+        title: 'Inventory GraphQL',
+        path: '/api/graphql/inventory.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'order-graphql',
+        title: 'Order GraphQL',
+        path: '/api/graphql/order.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'billing-graphql',
+        title: 'Billing GraphQL',
+        path: '/api/graphql/billing.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'pos-graphql',
+        title: 'POS GraphQL',
+        path: '/api/graphql/pos.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'repair-graphql',
+        title: 'Repair GraphQL',
+        path: '/api/graphql/repair.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'debt-graphql',
+        title: 'Debt GraphQL',
+        path: '/api/graphql/debt.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'customer-graphql',
+        title: 'Customer GraphQL',
+        path: '/api/graphql/customer.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'auction-graphql',
+        title: 'Auction GraphQL',
+        path: '/api/graphql/auction.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'console-graphql',
+        title: 'Console GraphQL',
+        path: '/api/graphql/console.md',
+        isExternal: true,
+        type: 'api'
+      },
+      {
+        id: 'crm-graphql',
+        title: 'CRM GraphQL',
+        path: '/api/graphql/crm.md',
+        isExternal: true,
+        type: 'api'
+      }
+    ]
+  },
+
+  // --- REST APIS ---
+  {
+    id: 'auth-rest',
+    title: 'Auth REST API',
+    type: 'api',
+    children: [
+      {
+        id: 'auth-rest-api',
+        title: 'Authentication API',
+        path: '/api/auth/rest-api.md',
+        isExternal: true,
+        type: 'api'
+      }
+    ]
+  },
+  {
+    id: 'project-rest',
+    title: 'Project REST API',
+    type: 'api',
+    children: [
+      {
+        id: 'project-api',
+        title: 'Project Service',
+        path: '/api/project/projects.md',
+        isExternal: true,
+        type: 'api'
       }
     ]
   },
